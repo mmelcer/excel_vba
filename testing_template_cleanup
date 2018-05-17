@@ -1,0 +1,38 @@
+Sub Sheet_Cleanup()
+
+Dim lSht As Long
+Dim ws As Worksheet
+
+Range("B2").Activate
+
+'Create index of worksheets based on workbook tabs
+For lSht = 2 To Sheets.Count
+    ActiveCell.Value = Sheets(lSht).Name
+    ActiveCell.Offset(1, 0).Activate
+Next lSht
+
+Range("C2").Activate
+
+'reset lSht variable
+lSht = Empty
+
+'vlookup to get new control IDs
+Do While ActiveCell.Offset(0, -1).Value <> ""
+    ActiveCell.Value = Application.WorksheetFunction.VLookup(ActiveCell.Offset(0, -1).Value, Range("mapping_table"), 2, False)
+    ActiveCell.Offset(1, 0).Select
+Loop
+    
+Range("C2").Activate
+
+'Rename the tab to the value in the "New Control ID" column & clear tab color
+
+For lSht = 2 To Sheets.Count
+    Worksheets(lSht).Name = ActiveCell.Value
+    With Worksheets(lSht).Tab 'change color of tabs to none
+        .ColorIndex = xlColorIndexNone
+        .TintAndShade = 0
+    End With
+    ActiveCell.Offset(1, 0).Activate
+Next lSht
+
+End Sub
