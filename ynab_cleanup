@@ -1,4 +1,4 @@
-Sub Copy_Paste()
+Sub YNAB_Cleanup()
 
 'Select cells & cleanup YNAB activity
 
