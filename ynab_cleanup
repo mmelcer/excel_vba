@@ -1,0 +1,32 @@
+Sub Copy_Paste()
+
+'Select cells & cleanup YNAB activity
+
+Do Until ActiveCell = ""
+
+'Check to see if third row contains a number (if yes then there is no memo) 
+If IsNumeric(ActiveCell.Offset(3, 0)) = True Then
+    Range(ActiveCell.Offset(1, 0), ActiveCell.Offset(3, 0)).Copy
+    ActiveCell.Offset(0, 1).PasteSpecial Transpose:=True
+    Application.CutCopyMode = False
+    'Move the amount one column over to the amount column
+    ActiveCell.Offset(0, 2).Select
+    ActiveCell.Offset(0, 1).Value = ActiveCell.Value
+    ActiveCell.Value = ""
+    ActiveCell.Offset(0, -3).Select
+    'Delete rows previously copied & pasted
+    Range(ActiveCell.Offset(1, 0), ActiveCell.Offset(3, 0)).Delete
+    'Increment one row down
+    ActiveCell.Offset(1, 0).Select
+Else
+    Range(ActiveCell.Offset(1, 0), ActiveCell.Offset(4, 0)).Copy
+    ActiveCell.Offset(0, 1).PasteSpecial Transpose:=True
+    Application.CutCopyMode = False
+    ActiveCell.Offset(0, -1).Select
+    Range(ActiveCell.Offset(1, 0), ActiveCell.Offset(4, 0)).Delete
+    ActiveCell.Offset(1, 0).Select
+End If
+
+Loop
+
+End Sub
