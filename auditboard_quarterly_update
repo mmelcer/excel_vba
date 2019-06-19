@@ -1,0 +1,32 @@
+Sub SplitData()
+
+    Const AuditNameCol = 4 ' audit name is in 1st column
+    Const FirstRow = 2 ' issue data starts in 2nd row
+    
+    Dim wkshtSource As Worksheet
+    Dim wkshtTarget As Worksheet
+    Dim Row As Long
+    Dim LastRow As Long
+    Dim TargetRow As Long
+    
+    Application.ScreenUpdating = False ' turn off screen update
+    
+    Set wkshtSource = ActiveSheet
+    LastRow = wkshtSource.Cells(wkshtSource.Rows.Count, AuditNameCol).End(xlUp).Row
+    
+    For Row = FirstRow To LastRow
+        If wkshtSource.Cells(Row, AuditNameCol).Value <> wkshtSource.Cells(Row - 1, 
+
+AuditNameCol).Value Then
+            Set wkshtTarget = Worksheets.Add(After:=Worksheets(Worksheets.Count))
+            wkshtTarget.Name = wkshtSource.Cells(Row, AuditNameCol).Value
+            wkshtSource.Rows(FirstRow - 1).Copy Destination:=wkshtTarget.Cells(1, 1)
+            TargetRow = 2
+        End If
+        wkshtSource.Rows(Row).Copy Destination:=wkshtTarget.Cells(TargetRow, 1)
+        TargetRow = TargetRow + 1
+    Next Row
+    
+    Application.ScreenUpdating = True
+
+End Sub
